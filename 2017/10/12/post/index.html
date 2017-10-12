@@ -79,16 +79,16 @@
 
 
 
-<meta name="description" content="Java中Math.random()源码浅析 好久没写博客，忙的有点晕。 开始从零自学java消遣一下，看书有点脑阔疼，不如看看源码！(๑╹◡╹)ﾉ”””  ​    JS中Math调用的都是本地方法，底层全是用C++写的，所以完全无法观察实现过程，Java的工具包虽然也有C/C++的介入，不过也有些是自己实现的。 ​    本篇文章主要简单阐述Math.random()的实现过程。 ​    M">
+<meta name="description" content="#   好久没写博客，忙的有点晕。 开始从零自学java消遣一下，看书有点脑阔疼，不如看看源码！(๑╹◡╹)ﾉ”””  ​    JS中Math调用的都是本地方法，底层全是用C++写的，所以完全无法观察实现过程，Java的工具包虽然也有C/C++的介入，不过也有些是自己实现的。 ​    本篇文章主要简单阐述Math.random()的实现过程。 ​    Math隶属于java.lang包中，默">
 <meta property="og:type" content="article">
-<meta property="og:title" content="post">
+<meta property="og:title" content="Java中Math.random()源码浅析">
 <meta property="og:url" content="http://c.hiphotos.baidu.com/zhidao/pic/item/b03533fa828ba61e9a43845d4734970a304e5916.jpg/2017/10/12/post/index.html">
 <meta property="og:site_name" content="书生小龙">
-<meta property="og:description" content="Java中Math.random()源码浅析 好久没写博客，忙的有点晕。 开始从零自学java消遣一下，看书有点脑阔疼，不如看看源码！(๑╹◡╹)ﾉ”””  ​    JS中Math调用的都是本地方法，底层全是用C++写的，所以完全无法观察实现过程，Java的工具包虽然也有C/C++的介入，不过也有些是自己实现的。 ​    本篇文章主要简单阐述Math.random()的实现过程。 ​    M">
-<meta property="og:updated_time" content="2017-10-12T07:00:41.631Z">
+<meta property="og:description" content="#   好久没写博客，忙的有点晕。 开始从零自学java消遣一下，看书有点脑阔疼，不如看看源码！(๑╹◡╹)ﾉ”””  ​    JS中Math调用的都是本地方法，底层全是用C++写的，所以完全无法观察实现过程，Java的工具包虽然也有C/C++的介入，不过也有些是自己实现的。 ​    本篇文章主要简单阐述Math.random()的实现过程。 ​    Math隶属于java.lang包中，默">
+<meta property="og:updated_time" content="2017-10-12T07:02:17.050Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="post">
-<meta name="twitter:description" content="Java中Math.random()源码浅析 好久没写博客，忙的有点晕。 开始从零自学java消遣一下，看书有点脑阔疼，不如看看源码！(๑╹◡╹)ﾉ”””  ​    JS中Math调用的都是本地方法，底层全是用C++写的，所以完全无法观察实现过程，Java的工具包虽然也有C/C++的介入，不过也有些是自己实现的。 ​    本篇文章主要简单阐述Math.random()的实现过程。 ​    M">
+<meta name="twitter:title" content="Java中Math.random()源码浅析">
+<meta name="twitter:description" content="#   好久没写博客，忙的有点晕。 开始从零自学java消遣一下，看书有点脑阔疼，不如看看源码！(๑╹◡╹)ﾉ”””  ​    JS中Math调用的都是本地方法，底层全是用C++写的，所以完全无法观察实现过程，Java的工具包虽然也有C/C++的介入，不过也有些是自己实现的。 ​    本篇文章主要简单阐述Math.random()的实现过程。 ​    Math隶属于java.lang包中，默">
 
 
 
@@ -124,7 +124,7 @@
 
 
 
-  <title>post | 书生小龙</title>
+  <title>Java中Math.random()源码浅析 | 书生小龙</title>
   
 
 
@@ -184,7 +184,7 @@
             
               <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
             
-            Startseite
+            Home
           </a>
         </li>
       
@@ -194,7 +194,7 @@
             
               <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
             
-            Archiv
+            Archives
           </a>
         </li>
       
@@ -248,7 +248,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">post</h1>
+          <h1 class="post-title" itemprop="name headline">Java中Math.random()源码浅析</h1>
         
 
         <div class="post-meta">
@@ -258,7 +258,7 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               
-                <span class="post-meta-item-text">Veröffentlicht am</span>
+                <span class="post-meta-item-text">Posted on</span>
               
               <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-10-12T10:15:16+08:00">
                 2017-10-12
@@ -298,7 +298,8 @@
       
 
       
-        <h1 id="Java中Math-random-源码浅析"><a href="#Java中Math-random-源码浅析" class="headerlink" title="Java中Math.random()源码浅析"></a>Java中Math.random()源码浅析</h1><blockquote>
+        <p># </p>
+<blockquote>
 <p>好久没写博客，忙的有点晕。</p>
 <p>开始从零自学java消遣一下，看书有点脑阔疼，不如看看源码！(๑╹◡╹)ﾉ”””</p>
 </blockquote>
@@ -475,17 +476,8 @@
       
 
       
-        <ul class="sidebar-nav motion-element">
-          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
-            Inhaltsverzeichnis
-          </li>
-          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
-            Übersicht
-          </li>
-        </ul>
-      
 
-      <section class="site-overview-wrap sidebar-panel">
+      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -501,7 +493,7 @@
                 <a href="/archives/">
               
                   <span class="site-state-item-count">2</span>
-                  <span class="site-state-item-name">Artikel</span>
+                  <span class="site-state-item-name">posts</span>
                 </a>
               </div>
             
@@ -530,22 +522,6 @@
       </section>
 
       
-      <!--noindex-->
-        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
-          <div class="post-toc">
-
-            
-              
-            
-
-            
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Java中Math-random-源码浅析"><span class="nav-number">1.</span> <span class="nav-text">Java中Math.random()源码浅析</span></a></li></ol></div>
-            
-
-          </div>
-        </section>
-      <!--/noindex-->
-      
 
       
 
@@ -569,7 +545,7 @@
 </div>
 
 
-  <div class="powered-by">Erstellt mit  <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
 
 
 
