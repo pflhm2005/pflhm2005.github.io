@@ -79,16 +79,16 @@
 
 
 
-<meta name="description" content="#   好久没写博客，忙的有点晕。 开始从零自学java消遣一下，看书有点脑阔疼，不如看看源码！(๑╹◡╹)ﾉ”””  ​    JS中Math调用的都是本地方法，底层全是用C++写的，所以完全无法观察实现过程，Java的工具包虽然也有C/C++的介入，不过也有些是自己实现的。 ​    本篇文章主要简单阐述Math.random()的实现过程。 ​    Math隶属于java.lang包中，默">
+<meta name="description" content="好久没写博客，忙的有点晕。 开始从零自学java消遣一下，看书有点脑阔疼，不如看看源码！(๑╹◡╹)ﾉ”””  ​    JS中Math调用的都是本地方法，底层全是用C++写的，所以完全无法观察实现过程，Java的工具包虽然也有C/C++的介入，不过也有些是自己实现的。 ​    本篇文章主要简单阐述Math.random()的实现过程。 ​    Math隶属于java.lang包中，默认加">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Java中Math.random()源码浅析">
 <meta property="og:url" content="http://c.hiphotos.baidu.com/zhidao/pic/item/b03533fa828ba61e9a43845d4734970a304e5916.jpg/2017/10/12/post/index.html">
 <meta property="og:site_name" content="书生小龙">
-<meta property="og:description" content="#   好久没写博客，忙的有点晕。 开始从零自学java消遣一下，看书有点脑阔疼，不如看看源码！(๑╹◡╹)ﾉ”””  ​    JS中Math调用的都是本地方法，底层全是用C++写的，所以完全无法观察实现过程，Java的工具包虽然也有C/C++的介入，不过也有些是自己实现的。 ​    本篇文章主要简单阐述Math.random()的实现过程。 ​    Math隶属于java.lang包中，默">
-<meta property="og:updated_time" content="2017-10-12T07:02:42.309Z">
+<meta property="og:description" content="好久没写博客，忙的有点晕。 开始从零自学java消遣一下，看书有点脑阔疼，不如看看源码！(๑╹◡╹)ﾉ”””  ​    JS中Math调用的都是本地方法，底层全是用C++写的，所以完全无法观察实现过程，Java的工具包虽然也有C/C++的介入，不过也有些是自己实现的。 ​    本篇文章主要简单阐述Math.random()的实现过程。 ​    Math隶属于java.lang包中，默认加">
+<meta property="og:updated_time" content="2017-10-13T06:39:37.964Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Java中Math.random()源码浅析">
-<meta name="twitter:description" content="#   好久没写博客，忙的有点晕。 开始从零自学java消遣一下，看书有点脑阔疼，不如看看源码！(๑╹◡╹)ﾉ”””  ​    JS中Math调用的都是本地方法，底层全是用C++写的，所以完全无法观察实现过程，Java的工具包虽然也有C/C++的介入，不过也有些是自己实现的。 ​    本篇文章主要简单阐述Math.random()的实现过程。 ​    Math隶属于java.lang包中，默">
+<meta name="twitter:description" content="好久没写博客，忙的有点晕。 开始从零自学java消遣一下，看书有点脑阔疼，不如看看源码！(๑╹◡╹)ﾉ”””  ​    JS中Math调用的都是本地方法，底层全是用C++写的，所以完全无法观察实现过程，Java的工具包虽然也有C/C++的介入，不过也有些是自己实现的。 ​    本篇文章主要简单阐述Math.random()的实现过程。 ​    Math隶属于java.lang包中，默认加">
 
 
 
@@ -184,7 +184,7 @@
             
               <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
             
-            Startseite
+            Home
           </a>
         </li>
       
@@ -194,7 +194,7 @@
             
               <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
             
-            Archiv
+            Archives
           </a>
         </li>
       
@@ -258,7 +258,7 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               
-                <span class="post-meta-item-text">Veröffentlicht am</span>
+                <span class="post-meta-item-text">Posted on</span>
               
               <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-10-12T10:15:16+08:00">
                 2017-10-12
@@ -298,7 +298,7 @@
       
 
       
-        <p># </p>
+        <hr>
 <blockquote>
 <p>好久没写博客，忙的有点晕。</p>
 <p>开始从零自学java消遣一下，看书有点脑阔疼，不如看看源码！(๑╹◡╹)ﾉ”””</p>
@@ -336,8 +336,10 @@
 <figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">(seed ^ multiplier)(<span class="number">0</span> ~ <span class="number">2</span>^<span class="number">53</span>-<span class="number">1</span>) &amp; mask(<span class="number">2</span>^<span class="number">48</span>-<span class="number">1</span>) =&gt; <span class="number">0</span> ~ <span class="number">2</span>^<span class="number">48</span>-<span class="number">1</span></div></pre></td></tr></table></figure>
 <p>​    结论是种子的范围是在0 ~ 2^48-1之间。</p>
 <p>​    测试代码：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">test</span> </span>&#123;</div><div class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String [] args)</span></span>&#123;</div><div class="line">		pro b = <span class="keyword">new</span> pro();</div><div class="line">		System.out.println(b.getValue());</div><div class="line">      	<span class="comment">// 256403749474577</span></div><div class="line">		<span class="comment">// 256458702577093</span></div><div class="line">		<span class="comment">// 256431328421593</span></div><div class="line">	&#125;</div><div class="line">&#125;</div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">pro</span></span>&#123;</div><div class="line">	<span class="keyword">long</span> seed = <span class="number">8682522807148012L</span> + System.nanoTime();</div><div class="line">	<span class="keyword">long</span> multiplier = <span class="number">0x5DEECE66DL</span>;</div><div class="line">	<span class="keyword">long</span> mask = (<span class="number">1L</span> &lt;&lt; <span class="number">48</span>) - <span class="number">1</span>;</div><div class="line">	<span class="function"><span class="keyword">long</span> <span class="title">getValue</span><span class="params">()</span></span>&#123;</div><div class="line">		<span class="keyword">return</span> (seed ^ multiplier) &amp; mask;</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">test</span> </span>&#123;</div><div class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String [] args)</span></span>&#123;</div><div class="line">    pro b = <span class="keyword">new</span> pro();</div><div class="line">    System.out.println(b.getValue());</div><div class="line">    <span class="comment">// 256403749474577</span></div><div class="line">    <span class="comment">// 256458702577093</span></div><div class="line">    <span class="comment">// 256431328421593</span></div><div class="line">  &#125;</div><div class="line">&#125;</div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">pro</span></span>&#123;</div><div class="line">  <span class="keyword">long</span> seed = <span class="number">8682522807148012L</span> + System.nanoTime();</div><div class="line">  <span class="keyword">long</span> multiplier = <span class="number">0x5DEECE66DL</span>;</div><div class="line">  <span class="keyword">long</span> mask = (<span class="number">1L</span> &lt;&lt; <span class="number">48</span>) - <span class="number">1</span>;</div><div class="line">  <span class="function"><span class="keyword">long</span> <span class="title">getValue</span><span class="params">()</span></span>&#123;</div><div class="line">    <span class="keyword">return</span> (seed ^ multiplier) &amp; mask;</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <p>​    构造函数调用完后，现在来看nextDouble，这个方法除去位运算，本质上就是调用了两次next方法：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">double</span> <span class="title">nextDouble</span><span class="params">()</span> </span>&#123;</div><div class="line">  <span class="keyword">return</span> (((<span class="keyword">long</span>)(next(<span class="number">26</span>)) &lt;&lt; <span class="number">27</span>) + next(<span class="number">27</span>))</div><div class="line">    / (<span class="keyword">double</span>)(<span class="number">1L</span> &lt;&lt; <span class="number">53</span>);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>​    所以直接看next方法：</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">protected</span> <span class="keyword">int</span> <span class="title">next</span><span class="params">(<span class="keyword">int</span> bits)</span> </span>&#123;</div><div class="line">  <span class="keyword">long</span> oldseed, nextseed;</div><div class="line">  AtomicLong seed = <span class="keyword">this</span>.seed;</div><div class="line">  <span class="keyword">do</span> &#123;</div><div class="line">    oldseed = seed.get();</div><div class="line">    nextseed = (oldseed * multiplier + addend) &amp; mask;</div><div class="line">  &#125; <span class="keyword">while</span> (!seed.compareAndSet(oldseed, nextseed));</div><div class="line">  <span class="keyword">return</span> (<span class="keyword">int</span>)(nextseed &gt;&gt;&gt; (<span class="number">48</span> - bits));</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <p>​    方法内部声明了2个long类型种子：oldseed、nextseed，通过get方法取得之前位运算得到的seed赋值给oldseed，然后再次通过运算得到一个nextseed的值，并传给seed.compareAndSet(oldseed, nextseed)方法中。</p>
 <p>​    关于这个方法，源码里是这样的：</p>
@@ -346,7 +348,7 @@
 <p>​    <a href="http://www.cnblogs.com/Mainz/p/3546347.html" target="_blank" rel="external">http://www.cnblogs.com/Mainz/p/3546347.html</a></p>
 <p>​    方法的用处简单讲也很简单，比较oldseed与内存中预期的值，如果符合，就将nextseed放进去。</p>
 <p>​    </p>
-<p>​    这里的运算也不管具体数值，oldseed * multiplier按最大计算会出现溢位，所以按照与运算这里的范围依然是0 ~ mask，即0 ~ 2^48-1。</p>
+<p>​    这里的运算也不管具体数值，oldseed * multiplier按最大计算会出现溢位，截取成long类型后的大小不确定，所以按照与运算这里的范围依然是0 ~ mask，即0 ~ 2^48-1。</p>
 <p>​    最后返回(int)(nextseed &gt;&gt;&gt; (48 - bits))，这里对结果进行类型处理，贴一个类型范围图：</p>
 <table>
 <thead>
@@ -381,13 +383,15 @@
 </table>
 <p>​    若结果是大于int类型最大值，超出的部分会被直接截取砍掉。</p>
 <p>​    最后看nextDouble的计算式：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">double</span> <span class="title">nextDouble</span><span class="params">()</span> </span>&#123;</div><div class="line">  <span class="keyword">return</span> (((<span class="keyword">long</span>)(next(<span class="number">26</span>)) &lt;&lt; <span class="number">27</span>) + next(<span class="number">27</span>))</div><div class="line">    / (<span class="keyword">double</span>)(<span class="number">1L</span> &lt;&lt; <span class="number">53</span>);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">(((<span class="keyword">long</span>)(next(<span class="number">26</span>)) &lt;&lt; <span class="number">27</span>) + next(<span class="number">27</span>)) / (<span class="keyword">double</span>)(<span class="number">1L</span> &lt;&lt; <span class="number">53</span>)</div></pre></td></tr></table></figure>
 <p>​    传入的bits分别为26与27，这时返回的随机数为：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">(<span class="keyword">int</span>)(nextseed &gt;&gt;&gt; <span class="number">22</span>)、(<span class="keyword">int</span>)(nextseed &gt;&gt;&gt; <span class="number">21</span>)</div></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">(<span class="keyword">int</span>)(nextseed &gt;&gt;&gt; <span class="number">22</span>) 与 (<span class="keyword">int</span>)(nextseed &gt;&gt;&gt; <span class="number">21</span>)</div></pre></td></tr></table></figure>
 <p>​    >>>为无符号右移，具体意思就不解释了。</p>
-<p>​    得到的结果范围大概是 0 ~ 2^26(27)-1，理论上是不会超过int的最大值。</p>
-<p>​    当seed(测试代码中的tmp)为mask时，此时计算会达到最大值，测试代码：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">test</span> </span>&#123;</div><div class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String [] args)</span></span>&#123;</div><div class="line">    testb bb = <span class="keyword">new</span> testb();</div><div class="line">    <span class="keyword">long</span> a = (<span class="keyword">long</span>)bb.getNext(<span class="number">26</span>);</div><div class="line">    <span class="keyword">long</span> b = bb.getNext(<span class="number">27</span>);</div><div class="line">    <span class="keyword">double</span> c = <span class="number">1L</span> &lt;&lt; <span class="number">53</span>;</div><div class="line">    <span class="keyword">double</span> d = ((a&lt;&lt;<span class="number">27</span>) +b)/c;</div><div class="line">    <span class="comment">// 0.99999999...</span></div><div class="line">    System.out.println(d);</div><div class="line">  &#125;</div><div class="line">&#125;</div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">testb</span></span>&#123;</div><div class="line">  <span class="keyword">long</span> tmp = (<span class="number">1L</span>&lt;&lt;<span class="number">48</span>)-<span class="number">1</span>;</div><div class="line">  <span class="comment">// long tmp = 0;</span></div><div class="line">  <span class="function"><span class="keyword">int</span> <span class="title">getNext</span><span class="params">(<span class="keyword">int</span> num)</span></span>&#123;</div><div class="line">    <span class="keyword">return</span> (<span class="keyword">int</span>)(tmp &gt;&gt;&gt; (<span class="number">48</span> - num));</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>​    得到的结果范围大概是 0 ~ 2^26(27)-1，理论上在这里是不会超过int的最大值。</p>
+<p>​    当seed(测试代码中的tmp)为mask时，此时计算会达到最大值：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">(((<span class="keyword">long</span>)(<span class="number">1L</span> &lt;&lt; <span class="number">53</span>)-<span class="number">1</span> ) / (<span class="keyword">double</span>)(<span class="number">1L</span> &lt;&lt; <span class="number">53</span>)</div></pre></td></tr></table></figure>
+<p>​    测试代码：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">test</span> </span>&#123;</div><div class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String [] args)</span></span>&#123;</div><div class="line">    testb bb = <span class="keyword">new</span> testb();</div><div class="line">    <span class="keyword">long</span> a = (<span class="keyword">long</span>)bb.getNext(<span class="number">26</span>);</div><div class="line">    <span class="keyword">long</span> b = bb.getNext(<span class="number">27</span>);</div><div class="line">    <span class="keyword">double</span> c = <span class="number">1L</span> &lt;&lt; <span class="number">53</span>;</div><div class="line">    <span class="keyword">double</span> d = ((a&lt;&lt;<span class="number">27</span>) +b)/c;</div><div class="line">    <span class="comment">// 0.99999999...</span></div><div class="line">    System.out.println(d);</div><div class="line">  &#125;</div><div class="line">&#125;</div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">testb</span></span>&#123;</div><div class="line">  <span class="keyword">long</span> tmp = (<span class="number">1L</span>&lt;&lt;<span class="number">48</span>)-<span class="number">1</span>;</div><div class="line">  <span class="comment">// long tmp = 0 =&gt; 0.0</span></div><div class="line">  <span class="function"><span class="keyword">int</span> <span class="title">getNext</span><span class="params">(<span class="keyword">int</span> num)</span></span>&#123;</div><div class="line">    <span class="keyword">return</span> (<span class="keyword">int</span>)(tmp &gt;&gt;&gt; (<span class="number">48</span> - num));</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <p>​    当测试代码中tmp为0时，计算结果为最小值0。</p>
 <p>​    每一次调用nextDouble，会生成不一样的seed，也就会返回不一样的数字。</p>
 <p>​    这样就是整个随机数生成过程。</p>
@@ -493,7 +497,7 @@
                 <a href="/archives/">
               
                   <span class="site-state-item-count">2</span>
-                  <span class="site-state-item-name">Artikel</span>
+                  <span class="site-state-item-name">posts</span>
                 </a>
               </div>
             
@@ -545,7 +549,7 @@
 </div>
 
 
-  <div class="powered-by">Erstellt mit  <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
 
 
 
