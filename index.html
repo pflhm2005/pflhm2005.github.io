@@ -181,7 +181,7 @@
             
               <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
             
-            Startseite
+            Home
           </a>
         </li>
       
@@ -191,7 +191,7 @@
             
               <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
             
-            Archiv
+            Archives
           </a>
         </li>
       
@@ -257,7 +257,7 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               
-                <span class="post-meta-item-text">Veröffentlicht am</span>
+                <span class="post-meta-item-text">Posted on</span>
               
               <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-10-18T11:03:24+08:00">
                 2017-10-18
@@ -327,6 +327,9 @@
 <p>​    项目里我用了webpack的vendor中将公共框架打包，其中也包含了element-ui，在其中搜索el-upload-list__item-delete字段，我发现了问题的所在：</p>
 <figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line">[</div><div class="line">  (_vm.handlePreview &amp;&amp; _vm.listType === <span class="string">'picture-card'</span>) ?</div><div class="line">  _c(<span class="string">'span'</span>, &#123;</div><div class="line">    staticClass: <span class="string">"el-upload-list__item-preview"</span>,</div><div class="line">    on: &#123;</div><div class="line">      <span class="string">"click"</span>: <span class="function"><span class="keyword">function</span>(<span class="params">$event</span>) </span>&#123;</div><div class="line">        _vm.handlePreview(file)</div><div class="line">      &#125;</div><div class="line">    &#125;</div><div class="line">  &#125;, [_c(<span class="string">'i'</span>, &#123;</div><div class="line">    staticClass: <span class="string">"el-icon-view"</span></div><div class="line">  &#125;)]) :</div><div class="line">  _vm._e(),</div><div class="line">  <span class="comment">// (!_vm.disabled)这里没有！！！！</span></div><div class="line">  _c(<span class="string">'span'</span>, &#123;</div><div class="line">    staticClass: <span class="string">"el-upload-list__item-delete"</span>,</div><div class="line">    on: &#123;</div><div class="line">      <span class="string">"click"</span>: <span class="function"><span class="keyword">function</span>(<span class="params">$event</span>) </span>&#123;</div><div class="line">        _vm.$emit(<span class="string">'remove'</span>, file)</div><div class="line">      &#125;</div><div class="line">    &#125;</div><div class="line">  &#125;, [_c(<span class="string">'i'</span>, &#123;</div><div class="line">    staticClass: <span class="string">"el-icon-delete2"</span></div><div class="line">  &#125;)])</div><div class="line">]</div></pre></td></tr></table></figure>
 <p>​    发现了没有？？？我靠，我不知道我打包的是不是假的element-ui，我只明白一点，要是正版里面有那一条判断语句，我不删掉的话，我的项目就拜拜了。</p>
+<p>​    <strong>后来的后来，我找到了原因</strong></p>
+<p>​    先贴个链接：<a href="https://github.com/ElemeFE/element/commit/c8442ac3c96d554caf92c5103083b23351f4ebf8" target="_blank" rel="external">https://github.com/ElemeFE/element/commit/c8442ac3c96d554caf92c5103083b23351f4ebf8</a></p>
+<p>​    我的项目版本是1.3.7，目前最新的是1.4.7，在某一次commit中，添加了这一条判断，真是日了狗了。</p>
 
           
         
@@ -404,7 +407,7 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               
-                <span class="post-meta-item-text">Veröffentlicht am</span>
+                <span class="post-meta-item-text">Posted on</span>
               
               <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-10-12T10:15:16+08:00">
                 2017-10-12
@@ -621,7 +624,7 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               
-                <span class="post-meta-item-text">Veröffentlicht am</span>
+                <span class="post-meta-item-text">Posted on</span>
               
               <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-10-12T09:56:24+08:00">
                 2017-10-12
@@ -754,7 +757,7 @@
                 <a href="/archives/">
               
                   <span class="site-state-item-count">3</span>
-                  <span class="site-state-item-name">Artikel</span>
+                  <span class="site-state-item-name">posts</span>
                 </a>
               </div>
             
@@ -806,7 +809,7 @@
 </div>
 
 
-  <div class="powered-by">Erstellt mit  <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
 
 
 
