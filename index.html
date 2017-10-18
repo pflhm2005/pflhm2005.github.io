@@ -181,7 +181,7 @@
             
               <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
             
-            Home
+            Startseite
           </a>
         </li>
       
@@ -191,7 +191,7 @@
             
               <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
             
-            Archives
+            Archiv
           </a>
         </li>
       
@@ -214,6 +214,149 @@
           <div id="content" class="content">
             
   <section id="posts" class="posts-expand">
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://c.hiphotos.baidu.com/zhidao/pic/item/b03533fa828ba61e9a43845d4734970a304e5916.jpg/2017/10/18/bug-note/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="John Doe">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="书生小龙">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2017/10/18/bug-note/" itemprop="url">element-ui组件问题</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Veröffentlicht am</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-10-18T11:03:24+08:00">
+                2017-10-18
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <hr>
+<blockquote>
+<p>最近写项目在用element-ui，二次封装了一些组件，但是发现了一些问题</p>
+</blockquote>
+<p>​    这个问题的出现很奇怪，我用vue单文件组件封装的时候，不会出现问题，结构如下：</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">template</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"upload-content"</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"upload-title"</span>&gt;</span>&#123;&#123;title&#125;&#125;<span class="tag">&lt;/<span class="name">div</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">el-upload</span></span></div><div class="line"><span class="tag">        <span class="attr">:action</span>=<span class="string">'action'</span></span></div><div class="line"><span class="tag">        <span class="attr">list-type</span>=<span class="string">"picture-card"</span></span></div><div class="line"><span class="tag">        <span class="attr">:on-remove</span>=<span class="string">"remove"</span></span></div><div class="line"><span class="tag">        <span class="attr">:on-success</span>=<span class="string">'success'</span></span></div><div class="line"><span class="tag">        <span class="attr">:on-progress</span>=<span class="string">'progress'</span></span></div><div class="line"><span class="tag">        <span class="attr">:disabled</span>=<span class="string">'isMax'</span></span></div><div class="line"><span class="tag">        <span class="attr">:file-list</span>=<span class="string">'fileList'</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">i</span> <span class="attr">class</span>=<span class="string">"el-icon-plus"</span> <span class="attr">v-show</span>=<span class="string">'!isMax'</span>&gt;</span><span class="tag">&lt;/<span class="name">i</span>&gt;</span></div><div class="line">        <span class="tag">&lt;/<span class="name">el-upload</span>&gt;</span></div><div class="line">    <span class="tag">&lt;/<span class="name">div</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">template</span>&gt;</span></div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="keyword">export</span> <span class="keyword">default</span> &#123;</div><div class="line">  data: <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">    <span class="keyword">return</span> &#123;</div><div class="line">      isMax:<span class="literal">false</span>,</div><div class="line">      action:<span class="string">'...'</span>,</div><div class="line">      fileList:[]</div><div class="line">    &#125;</div><div class="line">  &#125;,</div><div class="line">  props: [</div><div class="line">    <span class="string">'title'</span>,</div><div class="line">    <span class="string">'list'</span>,</div><div class="line">    <span class="string">'index'</span>,</div><div class="line">    <span class="string">'num'</span></div><div class="line">  ],</div><div class="line">  methods: &#123;</div><div class="line">    remove:<span class="function"><span class="keyword">function</span>(<span class="params">file, fileList</span>) </span>&#123;</div><div class="line">      <span class="keyword">this</span>.isMax = <span class="literal">false</span>;</div><div class="line">      <span class="keyword">this</span>.$emit(<span class="string">'upload_rev'</span>,file);</div><div class="line">    &#125;,</div><div class="line">    success:<span class="function"><span class="keyword">function</span>(<span class="params">response, file, fileList</span>)</span>&#123;</div><div class="line">      <span class="keyword">this</span>.isMax = <span class="literal">false</span>;</div><div class="line">      <span class="keyword">if</span>(<span class="keyword">this</span>.num &amp;&amp; fileList.length === <span class="keyword">this</span>.num)&#123;</div><div class="line">        <span class="keyword">this</span>.isMax = <span class="literal">true</span>;</div><div class="line">      &#125;</div><div class="line">      file.url = response.data.file.url;</div><div class="line">      <span class="keyword">if</span>(<span class="keyword">this</span>.index)&#123;</div><div class="line">        file.img_type = <span class="keyword">this</span>.index;</div><div class="line">      &#125;</div><div class="line">      <span class="keyword">this</span>.$emit(<span class="string">'upload_suc'</span>,file,fileList,<span class="keyword">this</span>.index);</div><div class="line">    &#125;,</div><div class="line">    progress:<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</div><div class="line">      <span class="keyword">this</span>.isMax = <span class="literal">true</span>;</div><div class="line">    &#125;</div><div class="line">  &#125;,</div><div class="line">  created:<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</div><div class="line">    <span class="keyword">if</span>(<span class="keyword">this</span>.list)&#123;</div><div class="line">      <span class="keyword">this</span>.fileList = <span class="keyword">this</span>.list;</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>​    这里的封装我主要是有这几个目的：</p>
+<p>1、上传过程中上传按钮禁用，保证一次只会上传一张</p>
+<p>2、可以通过传入num来限制上传图片的上限</p>
+<p>3、index用来做标记，因为有可能一个页面有3个类型的图集，这样可以通过传1、2、3来区分，3个图集的上传可以共用一个函数</p>
+<p>​    在项目中，这个功能是实现了，但是单独抽出来在一个页面测试的时候，却出现了问题：上传图片达到上限后，图片无法删除。也就是当el-upload上的disabled属性生效后，删除的按钮就渲染不出来了。</p>
+<p>​    </p>
+<p>​        通过DOM可以更直观的看到这个现象，正常情况下DOM结构如图：</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">div</span>&gt;</span></div><div class="line">  <span class="tag">&lt;<span class="name">ul</span> <span class="attr">class</span>=<span class="string">"el-upload-list el-upload-list--picture-card"</span>&gt;</span></div><div class="line">    <span class="comment">&lt;!-- 上传图片展示区域 --&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">li</span> <span class="attr">class</span>=<span class="string">"el-upload-list__item is-success"</span>&gt;</span></div><div class="line">      <span class="tag">&lt;<span class="name">img</span> <span class="attr">src</span>=<span class="string">"..."</span> <span class="attr">alt</span>=<span class="string">""</span> <span class="attr">class</span>=<span class="string">"el-upload-list__item-thumbnail"</span>&gt;</span></div><div class="line">      <span class="tag">&lt;<span class="name">a</span> <span class="attr">class</span>=<span class="string">"el-upload-list__item-name"</span>&gt;</span><span class="tag">&lt;<span class="name">i</span> <span class="attr">class</span>=<span class="string">"el-icon-document"</span>&gt;</span><span class="tag">&lt;/<span class="name">i</span>&gt;</span><span class="tag">&lt;/<span class="name">a</span>&gt;</span></div><div class="line">      <span class="comment">&lt;!-- 右上角的勾 --&gt;</span></div><div class="line">      <span class="tag">&lt;<span class="name">label</span> <span class="attr">class</span>=<span class="string">"el-upload-list__item-status-label"</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">i</span> <span class="attr">class</span>=<span class="string">"el-icon-upload-success el-icon-check"</span>&gt;</span><span class="tag">&lt;/<span class="name">i</span>&gt;</span></div><div class="line">      <span class="tag">&lt;/<span class="name">label</span>&gt;</span></div><div class="line">      <span class="tag">&lt;<span class="name">i</span> <span class="attr">class</span>=<span class="string">"el-icon-close"</span>&gt;</span><span class="tag">&lt;/<span class="name">i</span>&gt;</span></div><div class="line">      <span class="tag">&lt;<span class="name">span</span> <span class="attr">class</span>=<span class="string">"el-upload-list__item-actions"</span>&gt;</span></div><div class="line">        <span class="comment">&lt;!-- 正常情况删除按钮 --&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">span</span> <span class="attr">class</span>=<span class="string">"el-upload-list__item-delete"</span>&gt;</span></div><div class="line">          <span class="tag">&lt;<span class="name">i</span> <span class="attr">class</span>=<span class="string">"el-icon-delete2"</span>&gt;</span><span class="tag">&lt;/<span class="name">i</span>&gt;</span></div><div class="line">        <span class="tag">&lt;/<span class="name">span</span>&gt;</span></div><div class="line">        <span class="comment">&lt;!-- 异常情况 --&gt;</span></div><div class="line">        <span class="comment">&lt;!----&gt;</span></div><div class="line">        <span class="comment">&lt;!----&gt;</span></div><div class="line">      <span class="tag">&lt;/<span class="name">span</span>&gt;</span></div><div class="line">    <span class="tag">&lt;/<span class="name">li</span>&gt;</span></div><div class="line">  <span class="tag">&lt;/<span class="name">ul</span>&gt;</span></div><div class="line">  <span class="comment">&lt;!-- 上传按钮 --&gt;</span></div><div class="line">  <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"el-upload el-upload--picture-card"</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">i</span> <span class="attr">class</span>=<span class="string">"el-icon-plus"</span> <span class="attr">style</span>=<span class="string">"display: none;"</span>&gt;</span><span class="tag">&lt;/<span class="name">i</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">"file"</span> <span class="attr">name</span>=<span class="string">"file"</span> <span class="attr">class</span>=<span class="string">"el-upload__input"</span>&gt;</span></div><div class="line">  <span class="tag">&lt;/<span class="name">div</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></div></pre></td></tr></table></figure>
+<p>​    大体上包含两个部分，一个是已上传图片区域，一个是上传按钮区域。</p>
+<p>​    问题出在那个删除按钮，在disabled属性为true时，里面的DOM全部没了。</p>
+<p>​    由于在项目中未出现这个问题，一开始没有发现，后来单独抽出来想改进的时候，发现了这个问题。由于怎么想也不明白，所以直接去看了源码，通过npm下载的element-ui中的目录为element-ui/lib/upload.js，在源码中的643行-703行有上传图片展示区域的render函数，简化后代码如下：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// &lt;li class="el-upload-list__item is-success"&gt;</span></div><div class="line">_c(<span class="string">'li'</span>, &#123;</div><div class="line">  key: index,</div><div class="line">  class: ['el-upload-list__item', 'is-' + file.status]</div><div class="line">&#125;,</div><div class="line">   <span class="comment">// 下面是li的子节点</span></div><div class="line">   [(file.status !== <span class="string">'uploading'</span> &amp;&amp; [<span class="string">'picture-card'</span>, <span class="string">'picture'</span>].indexOf(_vm.listType) &gt; <span class="number">-1</span>) ?</div><div class="line">    <span class="comment">// img标签</span></div><div class="line">    _c(<span class="string">'img'</span>, &#123;</div><div class="line">      staticClass: <span class="string">"el-upload-list__item-thumbnail"</span>,</div><div class="line">      attrs: &#123;</div><div class="line">        <span class="string">"src"</span>: file.url,</div><div class="line">        <span class="string">"alt"</span>: <span class="string">""</span></div><div class="line">      &#125;</div><div class="line">    &#125;) : _vm._e(),</div><div class="line">    <span class="comment">// &lt;a class="el-upload-list__item-name"&gt;</span></div><div class="line">    _c(<span class="string">'a'</span>, &#123;</div><div class="line">      staticClass: <span class="string">"el-upload-list__item-name"</span>,</div><div class="line">      on: &#123;</div><div class="line">        <span class="string">"click"</span>: <span class="function"><span class="keyword">function</span>(<span class="params">$event</span>) </span>&#123;</div><div class="line">          _vm.handleClick(file)</div><div class="line">        &#125;</div><div class="line">      &#125;</div><div class="line">    &#125;,</div><div class="line">       <span class="comment">// 子节点&lt;i class="el-icon-document"&gt;</span></div><div class="line">       [_c(<span class="string">'i'</span>, &#123;</div><div class="line">         staticClass: <span class="string">"el-icon-document"</span></div><div class="line">       &#125;), _vm._v(_vm._s(file.name) + <span class="string">"\n    "</span>)]),</div><div class="line">    <span class="comment">/// &lt;label class="el-upload-list__item-status-label"&gt;</span></div><div class="line">    _c(<span class="string">'label'</span>, &#123;</div><div class="line">      staticClass: <span class="string">"el-upload-list__item-status-label"</span></div><div class="line">    &#125;,</div><div class="line">       <span class="comment">/* 子节点&lt;i class="el-icon-upload-success el-icon-check"&gt; */</span></div><div class="line">       [_c(<span class="string">'i'</span>, &#123;</div><div class="line">         class: &#123;</div><div class="line">           <span class="string">'el-icon-upload-success'</span>: <span class="literal">true</span>,</div><div class="line">           <span class="string">'el-icon-circle-check'</span>: _vm.listType === <span class="string">'text'</span>,</div><div class="line">           <span class="string">'el-icon-check'</span>: [<span class="string">'picture-card'</span>, <span class="string">'picture'</span>].indexOf(_vm.listType) &gt; <span class="number">-1</span></div><div class="line">         &#125;</div><div class="line">       &#125;)]),</div><div class="line">    <span class="comment">// 这里出现disabled</span></div><div class="line">    (!_vm.disabled) ?</div><div class="line">    <span class="comment">/* &lt;i class="el-icon-close"&gt;&lt;/i&gt; */</span></div><div class="line">    _c(<span class="string">'i'</span>, &#123;</div><div class="line">      staticClass: <span class="string">"el-icon-close"</span>,</div><div class="line">      on: &#123;</div><div class="line">        <span class="string">"click"</span>: <span class="function"><span class="keyword">function</span>(<span class="params">$event</span>) </span>&#123;</div><div class="line">          _vm.$emit(<span class="string">'remove'</span>, file)</div><div class="line">        &#125;</div><div class="line">      &#125;</div><div class="line">    &#125;) : _vm._e(),</div><div class="line">    <span class="comment">// 上传中则渲染下面的节点</span></div><div class="line">    (file.status === <span class="string">'uploading'</span>) ?</div><div class="line">    _c(<span class="string">'el-progress'</span>, &#123;</div><div class="line">      attrs: &#123;</div><div class="line">        <span class="string">"type"</span>: _vm.listType === <span class="string">'picture-card'</span> ? <span class="string">'circle'</span> : <span class="string">'line'</span>,</div><div class="line">        <span class="string">"stroke-width"</span>: _vm.listType === <span class="string">'picture-card'</span> ? <span class="number">6</span> : <span class="number">2</span>,</div><div class="line">        <span class="string">"percentage"</span>: _vm.parsePercentage(file.percentage)</div><div class="line">      &#125;</div><div class="line">    &#125;) : _vm._e(),</div><div class="line">    <span class="comment">// 根据listType渲染</span></div><div class="line">    (_vm.listType === <span class="string">'picture-card'</span>) ?</div><div class="line">    <span class="comment">// &lt;span class="el-upload-list__item-actions"&gt;</span></div><div class="line">    _c(<span class="string">'span'</span>, &#123;</div><div class="line">      staticClass: <span class="string">"el-upload-list__item-actions"</span></div><div class="line">    &#125;,</div><div class="line">       <span class="comment">// 根据是否存在on-preview钩子渲染</span></div><div class="line">       [(_vm.handlePreview &amp;&amp; _vm.listType === <span class="string">'picture-card'</span>) ?</div><div class="line">        <span class="comment">// </span></div><div class="line">        _c(<span class="string">'span'</span>, &#123;</div><div class="line">          staticClass: <span class="string">"el-upload-list__item-preview"</span>,</div><div class="line">          on: &#123;</div><div class="line">            <span class="string">"click"</span>: <span class="function"><span class="keyword">function</span>(<span class="params">$event</span>) </span>&#123;</div><div class="line">              _vm.handlePreview(file)</div><div class="line">            &#125;</div><div class="line">          &#125;</div><div class="line">        &#125;, [_c(<span class="string">'i'</span>, &#123;</div><div class="line">          staticClass: <span class="string">"el-icon-view"</span></div><div class="line">        &#125;)]) : _vm._e(),</div><div class="line">        <span class="comment">// 问题出在这里！</span></div><div class="line">        (!_vm.disabled) ?</div><div class="line">        <span class="comment">// &lt;span class="el-upload-list__item-delete"&gt; </span></div><div class="line">        _c(<span class="string">'span'</span>, &#123;</div><div class="line">          staticClass: <span class="string">"el-upload-list__item-delete"</span>,</div><div class="line">          on: &#123;</div><div class="line">            <span class="string">"click"</span>: <span class="function"><span class="keyword">function</span>(<span class="params">$event</span>) </span>&#123;</div><div class="line">              _vm.$emit(<span class="string">'remove'</span>, file)</div><div class="line">            &#125;</div><div class="line">          &#125;</div><div class="line">        &#125;, [_c(<span class="string">'i'</span>, &#123;</div><div class="line">          staticClass: <span class="string">"el-icon-delete2"</span></div><div class="line">        &#125;)]) : _vm._e() <span class="comment">/* 渲染注释 */</span></div><div class="line">       ]) : _vm._e()</div><div class="line">   ], <span class="number">1</span>)</div></pre></td></tr></table></figure>
+<p>​    问题原因找到了，确实在源码中，根据disabled属性会影响到删除按钮的生成。</p>
+<p>​    接下来看看上传的地方：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div></pre></td><td class="code"><pre><div class="line">handleClick = <span class="function"><span class="keyword">function</span> <span class="title">handleClick</span>(<span class="params"></span>) </span>&#123;</div><div class="line">  <span class="comment">// 绑定了disabled属性</span></div><div class="line">  <span class="keyword">if</span> (!<span class="keyword">this</span>.disabled) &#123;</div><div class="line">    <span class="keyword">this</span>.$refs.input.click();</div><div class="line">  &#125;</div><div class="line">&#125;</div><div class="line">h(<span class="string">'div'</span>, &#123;</div><div class="line">  class: &#123;</div><div class="line">    <span class="string">'el-upload'</span>: <span class="literal">true</span></div><div class="line">  &#125;,</div><div class="line">  <span class="comment">// 点击事件 </span></div><div class="line">  on: &#123;</div><div class="line">    click: handleClick</div><div class="line">  &#125;</div><div class="line">&#125;, [drag ?</div><div class="line">    <span class="comment">// 拖动</span></div><div class="line">    h(</div><div class="line">      <span class="string">'upload-dragger'</span>, &#123;</div><div class="line">        attrs: &#123;</div><div class="line">          disabled: disabled</div><div class="line">        &#125;,</div><div class="line">        on: &#123;</div><div class="line">          <span class="string">'file'</span>: uploadFiles</div><div class="line">        &#125;</div><div class="line">      &#125;, [<span class="keyword">this</span>.$slots.default]</div><div class="line">    ) :</div><div class="line">    <span class="comment">// 普通情况</span></div><div class="line">    <span class="keyword">this</span>.$slots.default, h(</div><div class="line">      <span class="string">'input'</span>, &#123;</div><div class="line">        <span class="string">'class'</span>: <span class="string">'el-upload__input'</span>,</div><div class="line">        attrs: &#123;</div><div class="line">          type: <span class="string">'file'</span>,</div><div class="line">          name: name,</div><div class="line">          multiple: multiple,</div><div class="line">          accept: accept</div><div class="line">        &#125;,</div><div class="line">        ref: <span class="string">'input'</span>,</div><div class="line">        on: &#123;</div><div class="line">          <span class="string">'change'</span>: handleChange</div><div class="line">        &#125;</div><div class="line">      &#125;, []</div><div class="line">    )</div><div class="line">   ]);</div></pre></td></tr></table></figure>
+<p>​    可以看到，这里的上传点击事件同样绑定了disabled属性，也就是说，如果把上传禁用了，那么删除的功能也会被禁用。</p>
+<p>​    那么问题来了，项目里为啥不会出现问题？？？调试有点繁琐，最近忙的要死，有空再看。</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
     
       
 
@@ -257,7 +400,7 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               
-                <span class="post-meta-item-text">Posted on</span>
+                <span class="post-meta-item-text">Veröffentlicht am</span>
               
               <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-10-12T10:15:16+08:00">
                 2017-10-12
@@ -474,7 +617,7 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               
-                <span class="post-meta-item-text">Posted on</span>
+                <span class="post-meta-item-text">Veröffentlicht am</span>
               
               <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-10-12T09:56:24+08:00">
                 2017-10-12
@@ -606,8 +749,8 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">2</span>
-                  <span class="site-state-item-name">posts</span>
+                  <span class="site-state-item-count">3</span>
+                  <span class="site-state-item-name">Artikel</span>
                 </a>
               </div>
             
@@ -659,7 +802,7 @@
 </div>
 
 
-  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+  <div class="powered-by">Erstellt mit  <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
 
 
 
