@@ -48,9 +48,9 @@
       </nav>
       <nav id="sub-nav">
         
-          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="Flux RSS"></a>
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
         
-        <a id="nav-search-btn" class="nav-icon" title="Rechercher"></a>
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
       </nav>
       <div id="search-form-wrap">
         <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://c.hiphotos.baidu.com/zhidao/pic/item/b03533fa828ba61e9a43845d4734970a304e5916.jpg"></form>
@@ -60,6 +60,60 @@
 </header>
       <div class="outer">
         <section id="main">
+  
+    <article id="post-upload2" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/10/23/upload2/" class="article-date">
+  <time datetime="2017-10-23T08:42:38.000Z" itemprop="datePublished">2017-10-23</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/10/23/upload2/">element-ui源码修改笔记2</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <blockquote>
+<p>产品又加了一个需求，要求删除图片时候弹一个提示框，如果确定就直接发请求从服务器删除图片</p>
+</blockquote>
+<p>​    一开始想的比较简单，直接在on-remove的钩子函数上做弹框提示，如果取消就撤销，代码如下：</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">el-upload</span> <span class="attr">:on-remove</span>=<span class="string">'remove'</span>&gt;</span><span class="tag">&lt;/<span class="name">el-upload</span>&gt;</span></div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">remove:<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</div><div class="line">    <span class="keyword">this</span>.$confirm(<span class="string">'此操作将永久删除图片, 是否继续?'</span>, <span class="string">'提示'</span>, &#123;</div><div class="line">        <span class="comment">// ...若干处理代码</span></div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>​    并不行，在我点下删除按钮的一瞬间，图片就消失了，接着才弹框。</p>
+<p>​    跑去看源码，才发现里面的逻辑是这样的：</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="comment">&lt;!-- upload-list.vue --&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">span</span> <span class="attr">v-if</span>=<span class="string">"!disabled"</span> <span class="attr">class</span>=<span class="string">"el-upload-list__item-delete"</span> @<span class="attr">click</span>=<span class="string">"$emit('remove', file)"</span>&gt;</span><span class="tag">&lt;/<span class="name">span</span>&gt;</span></div><div class="line"></div><div class="line"><span class="comment">&lt;!-- index.vue --&gt;</span></div><div class="line">&lt;UploadList ... on-remove=&#123;this.handleRemove&#125;&lt;/UploadList&gt;</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">handleRemove(file, raw) &#123;</div><div class="line">  <span class="keyword">if</span> (raw) &#123;</div><div class="line">    file = <span class="keyword">this</span>.getFile(raw);</div><div class="line">  &#125;</div><div class="line">  <span class="keyword">this</span>.abort(file);</div><div class="line">  <span class="keyword">let</span> fileList = <span class="keyword">this</span>.uploadFiles;</div><div class="line">  <span class="comment">// 先从fileList删除图片</span></div><div class="line">  fileList.splice(fileList.indexOf(file), <span class="number">1</span>);</div><div class="line">  <span class="comment">// 再触发remove事件</span></div><div class="line">  <span class="keyword">this</span>.onRemove(file, fileList);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>​    这样子就明白了，想在图片删除(消失)前出框只能撸源码了。</p>
+<p>​    由于element-ui有自带的弹框组件，所以如果能在源码直接嵌入组件那就最好了，于是我在handleRemove中打印了一下<code>this</code>，显示为<code>VueComponent</code>，与我写的vue文件的this一样，所以方法可以直接用，那就太方便了。</p>
+<p>​    修改后，源码如下：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// index.vue</span></div><div class="line"><span class="comment">// 首先添加一个变量来控制这个功能</span></div><div class="line">jimmyRemoveTip: &#123;</div><div class="line">  type: <span class="built_in">Boolean</span>,</div><div class="line">  <span class="keyword">default</span>: <span class="literal">false</span></div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment">// 根据变量控制流程</span></div><div class="line">handleRemove(file, raw) &#123;</div><div class="line">  <span class="comment">// 添加的确认环节</span></div><div class="line">  <span class="keyword">if</span> (<span class="keyword">this</span>.jimmyRemoveTip) &#123;</div><div class="line">    <span class="keyword">this</span>.$confirm(<span class="string">'此操作将永久删除图片, 是否继续?'</span>, <span class="string">'提示'</span>, &#123;</div><div class="line">      confirmButtonText: <span class="string">'确定'</span>,</div><div class="line">      cancelButtonText: <span class="string">'取消'</span>,</div><div class="line">      type: <span class="string">'warning'</span></div><div class="line">    &#125;).then(<span class="function"><span class="params">()</span> =&gt;</span> &#123;</div><div class="line">      <span class="comment">// ...删除图片</span></div><div class="line">    &#125;).catch(<span class="function"><span class="params">()</span> =&gt;</span> &#123;</div><div class="line">      <span class="keyword">this</span>.$message(&#123;</div><div class="line">        type: <span class="string">'info'</span>,</div><div class="line">        message: <span class="string">'已取消删除'</span></div><div class="line">      &#125;);          </div><div class="line">    &#125;);</div><div class="line">  &#125;<span class="keyword">else</span> &#123;</div><div class="line">    <span class="comment">// 正常流程</span></div><div class="line">  &#125;  </div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>​    (语法检查真是严格，else前后，大括号前必须有空格)</p>
+<p>​    这样，只要在组件传一个<code>:jimmyRemoveTip=&#39;true&#39;</code>，点击删除按钮就会弹一个提示框，确定才会走删除流程，否则框消失。</p>
+<p><img src="/img/del.png"></p>
+<p>​    成功，骚的一批！</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://c.hiphotos.baidu.com/zhidao/pic/item/b03533fa828ba61e9a43845d4734970a304e5916.jpg/2017/10/23/upload2/" data-id="cj93yhem40004pcnj8pd8sphb" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
   
     <article id="post-upload" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
@@ -184,7 +238,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://c.hiphotos.baidu.com/zhidao/pic/item/b03533fa828ba61e9a43845d4734970a304e5916.jpg/2017/10/23/upload/" data-id="cj93hqnf900017snjooydesjl" class="article-share-link">Partager</a>
+      <a data-url="http://c.hiphotos.baidu.com/zhidao/pic/item/b03533fa828ba61e9a43845d4734970a304e5916.jpg/2017/10/23/upload/" data-id="cj93yhem30003pcnjjyzyt885" class="article-share-link">Share</a>
       
       
     </footer>
@@ -251,7 +305,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://c.hiphotos.baidu.com/zhidao/pic/item/b03533fa828ba61e9a43845d4734970a304e5916.jpg/2017/10/18/bug-note/" data-id="cj93hqnf400007snj5sfpkwek" class="article-share-link">Partager</a>
+      <a data-url="http://c.hiphotos.baidu.com/zhidao/pic/item/b03533fa828ba61e9a43845d4734970a304e5916.jpg/2017/10/18/bug-note/" data-id="cj93yhelu0000pcnjl8t20t0n" class="article-share-link">Share</a>
       
       
     </footer>
@@ -385,7 +439,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://c.hiphotos.baidu.com/zhidao/pic/item/b03533fa828ba61e9a43845d4734970a304e5916.jpg/2017/10/12/post/" data-id="cj93hqnfb00027snjzliarumz" class="article-share-link">Partager</a>
+      <a data-url="http://c.hiphotos.baidu.com/zhidao/pic/item/b03533fa828ba61e9a43845d4734970a304e5916.jpg/2017/10/12/post/" data-id="cj93yhem20002pcnjzs8oazv3" class="article-share-link">Share</a>
       
       
     </footer>
@@ -430,7 +484,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://c.hiphotos.baidu.com/zhidao/pic/item/b03533fa828ba61e9a43845d4734970a304e5916.jpg/2017/10/12/hello-world/" data-id="cj93hqnfj00037snjwuxlnrcz" class="article-share-link">Partager</a>
+      <a data-url="http://c.hiphotos.baidu.com/zhidao/pic/item/b03533fa828ba61e9a43845d4734970a304e5916.jpg/2017/10/12/hello-world/" data-id="cj93yhely0001pcnjty3khptu" class="article-share-link">Share</a>
       
       
     </footer>
@@ -465,9 +519,13 @@
   
     
   <div class="widget-wrap">
-    <h3 class="widget-title">Articles récents</h3>
+    <h3 class="widget-title">Recent Posts</h3>
     <div class="widget">
       <ul>
+        
+          <li>
+            <a href="/2017/10/23/upload2/">element-ui源码修改笔记2</a>
+          </li>
         
           <li>
             <a href="/2017/10/23/upload/">element-ui源码修改笔记</a>
@@ -498,7 +556,7 @@
   <div class="outer">
     <div id="footer-info" class="inner">
       &copy; 2017 John Doe<br>
-      Propulsé by <a href="http://hexo.io/" target="_blank">Hexo</a>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
     </div>
   </div>
 </footer>
