@@ -5,18 +5,18 @@
   
   <title>element-ui源码修改笔记 | 书生小龙</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="前几天时间给element-ui提了一个问题，结果没有鸟我，没办法，只能修改源码来满足需求了  ######本文讨论的组件属性仅限于list-type=&amp;#39;picture-card&amp;#39;  ​    现在的问题是这样的： ​    element-ui中有一个upload组件，可以上传图片或文件。该组件有很丰富的钩子函数与配置，但是没有一个限制上传图片数量(即使是按钮禁用)的方法，">
+  <meta name="description" content="前几天时间给element-ui提了一个问题，结果没有鸟我，没办法，只能修改源码来满足需求了  本文讨论的组件属性仅限于list-type=&amp;#39;picture-card&amp;#39;  ​    现在的问题是这样的： ​    element-ui中有一个upload组件，可以上传图片或文件。该组件有很丰富的钩子函数与配置，但是没有一个限制上传图片数量(即使是按钮禁用)的方法，于是我就自己">
 <meta property="og:type" content="article">
 <meta property="og:title" content="element-ui源码修改笔记">
 <meta property="og:url" content="http://c.hiphotos.baidu.com/zhidao/pic/item/b03533fa828ba61e9a43845d4734970a304e5916.jpg/2017/10/23/upload/index.html">
 <meta property="og:site_name" content="书生小龙">
-<meta property="og:description" content="前几天时间给element-ui提了一个问题，结果没有鸟我，没办法，只能修改源码来满足需求了  ######本文讨论的组件属性仅限于list-type=&amp;#39;picture-card&amp;#39;  ​    现在的问题是这样的： ​    element-ui中有一个upload组件，可以上传图片或文件。该组件有很丰富的钩子函数与配置，但是没有一个限制上传图片数量(即使是按钮禁用)的方法，">
+<meta property="og:description" content="前几天时间给element-ui提了一个问题，结果没有鸟我，没办法，只能修改源码来满足需求了  本文讨论的组件属性仅限于list-type=&amp;#39;picture-card&amp;#39;  ​    现在的问题是这样的： ​    element-ui中有一个upload组件，可以上传图片或文件。该组件有很丰富的钩子函数与配置，但是没有一个限制上传图片数量(即使是按钮禁用)的方法，于是我就自己">
 <meta property="og:image" content="http://c.hiphotos.baidu.com/img/rev.png">
 <meta property="og:image" content="http://c.hiphotos.baidu.com/img/suc.png">
-<meta property="og:updated_time" content="2017-10-24T06:55:37.224Z">
+<meta property="og:updated_time" content="2017-10-24T06:57:20.493Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="element-ui源码修改笔记">
-<meta name="twitter:description" content="前几天时间给element-ui提了一个问题，结果没有鸟我，没办法，只能修改源码来满足需求了  ######本文讨论的组件属性仅限于list-type=&amp;#39;picture-card&amp;#39;  ​    现在的问题是这样的： ​    element-ui中有一个upload组件，可以上传图片或文件。该组件有很丰富的钩子函数与配置，但是没有一个限制上传图片数量(即使是按钮禁用)的方法，">
+<meta name="twitter:description" content="前几天时间给element-ui提了一个问题，结果没有鸟我，没办法，只能修改源码来满足需求了  本文讨论的组件属性仅限于list-type=&amp;#39;picture-card&amp;#39;  ​    现在的问题是这样的： ​    element-ui中有一个upload组件，可以上传图片或文件。该组件有很丰富的钩子函数与配置，但是没有一个限制上传图片数量(即使是按钮禁用)的方法，于是我就自己">
 <meta name="twitter:image" content="http://c.hiphotos.baidu.com/img/rev.png">
   
     <link rel="alternate" href="/atom.xml" title="书生小龙" type="application/atom+xml">
@@ -91,7 +91,7 @@
         <blockquote>
 <p>  前几天时间给element-ui提了一个问题，结果没有鸟我，没办法，只能修改源码来满足需求了</p>
 </blockquote>
-<p>######本文讨论的组件属性仅限于<code>list-type=&#39;picture-card&#39;</code></p>
+<p>本文讨论的组件属性仅限于<code>list-type=&#39;picture-card&#39;</code></p>
 <hr>
 <p>​    现在的问题是这样的：</p>
 <p>​    element-ui中有一个upload组件，可以上传图片或文件。该组件有很丰富的钩子函数与配置，但是没有一个限制上传图片数量(即使是按钮禁用)的方法，于是我就自己封装了一下：</p>
@@ -191,7 +191,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://c.hiphotos.baidu.com/zhidao/pic/item/b03533fa828ba61e9a43845d4734970a304e5916.jpg/2017/10/23/upload/" data-id="cj959bq500004c8njle5ahe6r" class="article-share-link">Share</a>
+      <a data-url="http://c.hiphotos.baidu.com/zhidao/pic/item/b03533fa828ba61e9a43845d4734970a304e5916.jpg/2017/10/23/upload/" data-id="cj959e3zk000394njnhrl5xts" class="article-share-link">Share</a>
       
       
     </footer>

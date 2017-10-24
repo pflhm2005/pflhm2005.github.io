@@ -5,17 +5,17 @@
   
   <title>element-ui源码修改笔记2 | 书生小龙</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="######产品又加了一个需求，要求删除图片时候弹一个提示框，如果确定就直接发请求从服务器删除图片 ​    一开始想的比较简单，直接在on-remove的钩子函数上做弹框提示，如果取消就撤销，代码如下： 1&amp;lt;el-upload :on-remove=&apos;remove&apos;&amp;gt;&amp;lt;/el-upload&amp;gt; 12345remove:function()&amp;#123;    this.$co">
+  <meta name="description" content="产品又加了一个需求，要求删除图片时候弹一个提示框，如果确定就直接发请求从服务器删除图片 ​    一开始想的比较简单，直接在on-remove的钩子函数上做弹框提示，如果取消就撤销，代码如下： 1&amp;lt;el-upload :on-remove=&apos;remove&apos;&amp;gt;&amp;lt;/el-upload&amp;gt; 12345remove:function()&amp;#123;    this.$confirm(">
 <meta property="og:type" content="article">
 <meta property="og:title" content="element-ui源码修改笔记2">
 <meta property="og:url" content="http://c.hiphotos.baidu.com/zhidao/pic/item/b03533fa828ba61e9a43845d4734970a304e5916.jpg/2017/10/23/upload2/index.html">
 <meta property="og:site_name" content="书生小龙">
-<meta property="og:description" content="######产品又加了一个需求，要求删除图片时候弹一个提示框，如果确定就直接发请求从服务器删除图片 ​    一开始想的比较简单，直接在on-remove的钩子函数上做弹框提示，如果取消就撤销，代码如下： 1&amp;lt;el-upload :on-remove=&apos;remove&apos;&amp;gt;&amp;lt;/el-upload&amp;gt; 12345remove:function()&amp;#123;    this.$co">
+<meta property="og:description" content="产品又加了一个需求，要求删除图片时候弹一个提示框，如果确定就直接发请求从服务器删除图片 ​    一开始想的比较简单，直接在on-remove的钩子函数上做弹框提示，如果取消就撤销，代码如下： 1&amp;lt;el-upload :on-remove=&apos;remove&apos;&amp;gt;&amp;lt;/el-upload&amp;gt; 12345remove:function()&amp;#123;    this.$confirm(">
 <meta property="og:image" content="http://c.hiphotos.baidu.com/img/del.png">
-<meta property="og:updated_time" content="2017-10-24T06:55:45.527Z">
+<meta property="og:updated_time" content="2017-10-24T06:57:29.914Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="element-ui源码修改笔记2">
-<meta name="twitter:description" content="######产品又加了一个需求，要求删除图片时候弹一个提示框，如果确定就直接发请求从服务器删除图片 ​    一开始想的比较简单，直接在on-remove的钩子函数上做弹框提示，如果取消就撤销，代码如下： 1&amp;lt;el-upload :on-remove=&apos;remove&apos;&amp;gt;&amp;lt;/el-upload&amp;gt; 12345remove:function()&amp;#123;    this.$co">
+<meta name="twitter:description" content="产品又加了一个需求，要求删除图片时候弹一个提示框，如果确定就直接发请求从服务器删除图片 ​    一开始想的比较简单，直接在on-remove的钩子函数上做弹框提示，如果取消就撤销，代码如下： 1&amp;lt;el-upload :on-remove=&apos;remove&apos;&amp;gt;&amp;lt;/el-upload&amp;gt; 12345remove:function()&amp;#123;    this.$confirm(">
 <meta name="twitter:image" content="http://c.hiphotos.baidu.com/img/del.png">
   
     <link rel="alternate" href="/atom.xml" title="书生小龙" type="application/atom+xml">
@@ -87,7 +87,7 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>######产品又加了一个需求，要求删除图片时候弹一个提示框，如果确定就直接发请求从服务器删除图片</p>
+        <p>产品又加了一个需求，要求删除图片时候弹一个提示框，如果确定就直接发请求从服务器删除图片</p>
 <p>​    一开始想的比较简单，直接在on-remove的钩子函数上做弹框提示，如果取消就撤销，代码如下：</p>
 <figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">el-upload</span> <span class="attr">:on-remove</span>=<span class="string">'remove'</span>&gt;</span><span class="tag">&lt;/<span class="name">el-upload</span>&gt;</span></div></pre></td></tr></table></figure>
 <figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">remove:<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</div><div class="line">    <span class="keyword">this</span>.$confirm(<span class="string">'此操作将永久删除图片, 是否继续?'</span>, <span class="string">'提示'</span>, &#123;</div><div class="line">        <span class="comment">// ...若干处理代码</span></div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
@@ -107,7 +107,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://c.hiphotos.baidu.com/zhidao/pic/item/b03533fa828ba61e9a43845d4734970a304e5916.jpg/2017/10/23/upload2/" data-id="cj959bq4x0002c8nj53gn58fd" class="article-share-link">Share</a>
+      <a data-url="http://c.hiphotos.baidu.com/zhidao/pic/item/b03533fa828ba61e9a43845d4734970a304e5916.jpg/2017/10/23/upload2/" data-id="cj959e3zl000494njpuz5mz2b" class="article-share-link">Share</a>
       
       
     </footer>
