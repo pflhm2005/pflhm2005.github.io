@@ -1,2 +1,650 @@
-<!DOCTYPE html><html><head><meta charset="utf-8"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="yes" name="apple-touch-fullscreen"><meta content="telephone=no,email=no" name="format-detection"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no"><link rel="shortcut icon" href="/images/favicon.ico" type="image/x-icon"><link href="https://fonts.googleapis.com/css?family=Rubik" rel="stylesheet"><script src="https://use.fontawesome.com/adaf0e149c.js"></script><link rel="stylesheet" href="https://cdn.bootcss.com/highlight.js/9.6.0/styles/monokai_sublime.min.css"><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="/css/post.css"><link rel="stylesheet" href="/css/markdown-github.css"><title>书生小龙</title><script src="/js/googleAnalytics.js"></script></head><body><div id="postContainer"><div id="postTop"><h4 id="logo">Life Is Short</h4><br><br><h2 id="postTitle">element-ui源码修改笔记2</h2><br><span aria-hidden="true" class="postTime fa fa-calendar">2017-10-23</span><br><br></div><section id="articleDiv"><p>产品又加了一个需求，要求删除图片时候弹一个提示框，如果确定就直接发请求从服务器删除图片</p><br><p>​    一开始想的比较简单，直接在on-remove的钩子函数上做弹框提示，如果取消就撤销，代码如下：</p><br><figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">el-upload</span> <span class="attr">:on-remove</span>=<span class="string">‘remove’</span>&gt;</span><span class="tag">&lt;/<span class="name">el-upload</span>&gt;</span></div></pre></td></tr></table></figure><br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">remove:<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</div><div class="line">    <span class="keyword">this</span>.$confirm(<span class="string">‘此操作将永久删除图片, 是否继续?’</span>, <span class="string">‘提示’</span>, &#123;</div><div class="line">        <span class="comment">// …若干处理代码</span></div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure><br><p>​    并不行，在我点下删除按钮的一瞬间，图片就消失了，接着才弹框。</p><br><p>​    跑去看源码，才发现里面的逻辑是这样的：</p><br><figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="comment">&lt;!– upload-list.vue –&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">span</span> <span class="attr">v-if</span>=<span class="string">“!disabled”</span> <span class="attr">class</span>=<span class="string">“el-upload-list__item-delete”</span> @<span class="attr">click</span>=<span class="string">“$emit(‘remove’, file)”</span>&gt;</span><span class="tag">&lt;/<span class="name">span</span>&gt;</span></div><div class="line"></div><div class="line"><span class="comment">&lt;!– index.vue –&gt;</span></div><div class="line">&lt;UploadList … on-remove=&#123;this.handleRemove&#125;&lt;/UploadList&gt;</div></pre></td></tr></table></figure><br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">handleRemove(file, raw) &#123;</div><div class="line">  <span class="keyword">if</span> (raw) &#123;</div><div class="line">    file = <span class="keyword">this</span>.getFile(raw);</div><div class="line">  &#125;</div><div class="line">  <span class="keyword">this</span>.abort(file);</div><div class="line">  <span class="keyword">let</span> fileList = <span class="keyword">this</span>.uploadFiles;</div><div class="line">  <span class="comment">// 先从fileList删除图片</span></div><div class="line">  fileList.splice(fileList.indexOf(file), <span class="number">1</span>);</div><div class="line">  <span class="comment">// 再触发remove事件</span></div><div class="line">  <span class="keyword">this</span>.onRemove(file, fileList);</div><div class="line">&#125;</div></pre></td></tr></table></figure><br><p>​    这样子就明白了，想在图片删除(消失)前出框只能撸源码了。</p><br><p>​    由于element-ui有自带的弹框组件，所以如果能在源码直接嵌入组件那就最好了，于是我在handleRemove中打印了一下<code>this</code>，显示为<code>VueComponent</code>，与我写的vue文件的this一样，所以方法可以直接用，那就太方便了。</p><br><p>​    修改后，源码如下：</p><br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// index.vue</span></div><div class="line"><span class="comment">// 首先添加一个变量来控制这个功能</span></div><div class="line">jimmyRemoveTip: &#123;</div><div class="line">  type: <span class="built_in">Boolean</span>,</div><div class="line">  <span class="keyword">default</span>: <span class="literal">false</span></div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment">// 根据变量控制流程</span></div><div class="line">handleRemove(file, raw) &#123;</div><div class="line">  <span class="comment">// 添加的确认环节</span></div><div class="line">  <span class="keyword">if</span> (<span class="keyword">this</span>.jimmyRemoveTip) &#123;</div><div class="line">    <span class="keyword">this</span>.$confirm(<span class="string">‘此操作将永久删除图片, 是否继续?’</span>, <span class="string">‘提示’</span>, &#123;</div><div class="line">      confirmButtonText: <span class="string">‘确定’</span>,</div><div class="line">      cancelButtonText: <span class="string">‘取消’</span>,</div><div class="line">      type: <span class="string">‘warning’</span></div><div class="line">    &#125;).then(<span class="function"><span class="params">()</span> =&gt;</span> &#123;</div><div class="line">      <span class="comment">// …删除图片</span></div><div class="line">    &#125;).catch(<span class="function"><span class="params">()</span> =&gt;</span> &#123;</div><div class="line">      <span class="keyword">this</span>.$message(&#123;</div><div class="line">        type: <span class="string">‘info’</span>,</div><div class="line">        message: <span class="string">‘已取消删除’</span></div><div class="line">      &#125;);          </div><div class="line">    &#125;);</div><div class="line">  &#125;<span class="keyword">else</span> &#123;</div><div class="line">    <span class="comment">// 正常流程</span></div><div class="line">  &#125;  </div><div class="line">&#125;</div></pre></td></tr></table></figure><br><p>​    (语法检查真是严格，else前后，大括号前必须有空格)</p><br><p>​    这样，只要在组件传一个<code>:jimmyRemoveTip=&#39;true&#39;</code>，点击删除按钮就会弹一个提示框，确定才会走删除流程，否则框消失。</p><br><p><img src="/img/del.png"></p><br><p>​    成功，骚的一批！</p>
-</section></div><script src="/js/jquery.min.js"></script><script src="/js/highlight.min.js"></script><script src="/js/start.js"></script></body></html>
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.3" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.3">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.3" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="产品又加了一个需求，要求删除图片时候弹一个提示框，如果确定就直接发请求从服务器删除图片 ​    一开始想的比较简单，直接在on-remove的钩子函数上做弹框提示，如果取消就撤销，代码如下： 1&amp;lt;el-upload :on-remove=&apos;remove&apos;&amp;gt;&amp;lt;/el-upload&amp;gt; 12345remove:function()&amp;#123;    this.$confirm(">
+<meta property="og:type" content="article">
+<meta property="og:title" content="element-ui源码修改笔记2">
+<meta property="og:url" content="http://c.hiphotos.baidu.com/zhidao/pic/item/b03533fa828ba61e9a43845d4734970a304e5916.jpg/2017/10/23/upload2/index.html">
+<meta property="og:site_name" content="书生小龙">
+<meta property="og:description" content="产品又加了一个需求，要求删除图片时候弹一个提示框，如果确定就直接发请求从服务器删除图片 ​    一开始想的比较简单，直接在on-remove的钩子函数上做弹框提示，如果取消就撤销，代码如下： 1&amp;lt;el-upload :on-remove=&apos;remove&apos;&amp;gt;&amp;lt;/el-upload&amp;gt; 12345remove:function()&amp;#123;    this.$confirm(">
+<meta property="og:image" content="http://c.hiphotos.baidu.com/img/del.png">
+<meta property="og:updated_time" content="2017-10-24T06:57:29.914Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="element-ui源码修改笔记2">
+<meta name="twitter:description" content="产品又加了一个需求，要求删除图片时候弹一个提示框，如果确定就直接发请求从服务器删除图片 ​    一开始想的比较简单，直接在on-remove的钩子函数上做弹框提示，如果取消就撤销，代码如下： 1&amp;lt;el-upload :on-remove=&apos;remove&apos;&amp;gt;&amp;lt;/el-upload&amp;gt; 12345remove:function()&amp;#123;    this.$confirm(">
+<meta name="twitter:image" content="http://c.hiphotos.baidu.com/img/del.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '5.1.3',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://c.hiphotos.baidu.com/zhidao/pic/item/b03533fa828ba61e9a43845d4734970a304e5916.jpg/2017/10/23/upload2/"/>
+
+
+
+
+
+  <title>element-ui源码修改笔记2 | 书生小龙</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">书生小龙</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">沉迷技术(因为没有项目)</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Startseite
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archiv
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://c.hiphotos.baidu.com/zhidao/pic/item/b03533fa828ba61e9a43845d4734970a304e5916.jpg/2017/10/23/upload2/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="书生小龙">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">element-ui源码修改笔记2</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Veröffentlicht am</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-10-23T16:42:38+08:00">
+                2017-10-23
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>产品又加了一个需求，要求删除图片时候弹一个提示框，如果确定就直接发请求从服务器删除图片</p>
+<p>​    一开始想的比较简单，直接在on-remove的钩子函数上做弹框提示，如果取消就撤销，代码如下：</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">el-upload</span> <span class="attr">:on-remove</span>=<span class="string">'remove'</span>&gt;</span><span class="tag">&lt;/<span class="name">el-upload</span>&gt;</span></div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">remove:<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</div><div class="line">    <span class="keyword">this</span>.$confirm(<span class="string">'此操作将永久删除图片, 是否继续?'</span>, <span class="string">'提示'</span>, &#123;</div><div class="line">        <span class="comment">// ...若干处理代码</span></div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>​    并不行，在我点下删除按钮的一瞬间，图片就消失了，接着才弹框。</p>
+<p>​    跑去看源码，才发现里面的逻辑是这样的：</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="comment">&lt;!-- upload-list.vue --&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">span</span> <span class="attr">v-if</span>=<span class="string">"!disabled"</span> <span class="attr">class</span>=<span class="string">"el-upload-list__item-delete"</span> @<span class="attr">click</span>=<span class="string">"$emit('remove', file)"</span>&gt;</span><span class="tag">&lt;/<span class="name">span</span>&gt;</span></div><div class="line"></div><div class="line"><span class="comment">&lt;!-- index.vue --&gt;</span></div><div class="line">&lt;UploadList ... on-remove=&#123;this.handleRemove&#125;&lt;/UploadList&gt;</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">handleRemove(file, raw) &#123;</div><div class="line">  <span class="keyword">if</span> (raw) &#123;</div><div class="line">    file = <span class="keyword">this</span>.getFile(raw);</div><div class="line">  &#125;</div><div class="line">  <span class="keyword">this</span>.abort(file);</div><div class="line">  <span class="keyword">let</span> fileList = <span class="keyword">this</span>.uploadFiles;</div><div class="line">  <span class="comment">// 先从fileList删除图片</span></div><div class="line">  fileList.splice(fileList.indexOf(file), <span class="number">1</span>);</div><div class="line">  <span class="comment">// 再触发remove事件</span></div><div class="line">  <span class="keyword">this</span>.onRemove(file, fileList);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>​    这样子就明白了，想在图片删除(消失)前出框只能撸源码了。</p>
+<p>​    由于element-ui有自带的弹框组件，所以如果能在源码直接嵌入组件那就最好了，于是我在handleRemove中打印了一下<code>this</code>，显示为<code>VueComponent</code>，与我写的vue文件的this一样，所以方法可以直接用，那就太方便了。</p>
+<p>​    修改后，源码如下：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// index.vue</span></div><div class="line"><span class="comment">// 首先添加一个变量来控制这个功能</span></div><div class="line">jimmyRemoveTip: &#123;</div><div class="line">  type: <span class="built_in">Boolean</span>,</div><div class="line">  <span class="keyword">default</span>: <span class="literal">false</span></div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment">// 根据变量控制流程</span></div><div class="line">handleRemove(file, raw) &#123;</div><div class="line">  <span class="comment">// 添加的确认环节</span></div><div class="line">  <span class="keyword">if</span> (<span class="keyword">this</span>.jimmyRemoveTip) &#123;</div><div class="line">    <span class="keyword">this</span>.$confirm(<span class="string">'此操作将永久删除图片, 是否继续?'</span>, <span class="string">'提示'</span>, &#123;</div><div class="line">      confirmButtonText: <span class="string">'确定'</span>,</div><div class="line">      cancelButtonText: <span class="string">'取消'</span>,</div><div class="line">      type: <span class="string">'warning'</span></div><div class="line">    &#125;).then(<span class="function"><span class="params">()</span> =&gt;</span> &#123;</div><div class="line">      <span class="comment">// ...删除图片</span></div><div class="line">    &#125;).catch(<span class="function"><span class="params">()</span> =&gt;</span> &#123;</div><div class="line">      <span class="keyword">this</span>.$message(&#123;</div><div class="line">        type: <span class="string">'info'</span>,</div><div class="line">        message: <span class="string">'已取消删除'</span></div><div class="line">      &#125;);          </div><div class="line">    &#125;);</div><div class="line">  &#125;<span class="keyword">else</span> &#123;</div><div class="line">    <span class="comment">// 正常流程</span></div><div class="line">  &#125;  </div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>​    (语法检查真是严格，else前后，大括号前必须有空格)</p>
+<p>​    这样，只要在组件传一个<code>:jimmyRemoveTip=&#39;true&#39;</code>，点击删除按钮就会弹一个提示框，确定才会走删除流程，否则框消失。</p>
+<p><img src="/img/del.png"></p>
+<p>​    成功，骚的一批！</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/10/23/upload/" rel="next" title="element-ui源码修改笔记">
+                <i class="fa fa-chevron-left"></i> element-ui源码修改笔记
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/10/27/cookie/" rel="prev" title="验证码点击倒计时">
+                验证码点击倒计时 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+
+      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name"></p>
+              <p class="site-description motion-element" itemprop="description">纸上谈兵的王者</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">6</span>
+                  <span class="site-state-item-name">Artikel</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+
+          </nav>
+
+          
+
+          <div class="links-of-author motion-element">
+            
+          </div>
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder"></span>
+
+  
+</div>
+
+
+  <div class="powered-by">Erstellt mit  <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Muse</a> v5.1.3</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.3"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.3"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
